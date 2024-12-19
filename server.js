@@ -1,16 +1,19 @@
 var express = require('express')
+var http = require('http')
+const path = require('path');
 var app= express()
 var mongoose = require('mongoose')
 var hotelRouter = require('./Controller/hotelController')
-var http = require('http')
 var { socketIO } = require('./Service/hotelService')
 
 var server = http.createServer(app)
+app.use(express.json())
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'twig');
-app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use('/hotels',hotelRouter)
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded

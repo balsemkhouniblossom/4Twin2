@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Hotel Room Management</title>
+    <!-- Include Socket.IO client library -->
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <!-- Your form or UI elements here -->
+    <button id="addRoomButton">Add Room</button>
+    <input type="text" id="hotelId" placeholder="Hotel ID">
+    <input type="text" id="roomNumber" placeholder="Room Number">
+    <input type="text" id="roomType" placeholder="Room Type">
+    <input type="number" id="roomPrice" placeholder="Price">
+
+    <script>
+        const socket = io();
+
+        document.getElementById('addRoomButton').addEventListener('click', () => {
+                console.log("Button clicked"); // Should see this in console when clicking
+            const hotelId = document.getElementById('hotelId').value;
+            const roomDetails = {
+                roomNumber: document.getElementById('roomNumber').value,
+                type: document.getElementById('roomType').value,
+                price: Number(document.getElementById('roomPrice').value)
+            };
+
+            socket.emit('addRoom', { hotelId, room: roomDetails });
+        });
+
+        socket.on('roomAdded', (data) => {
+            console.log(data.message);
+            // Update UI or perform other actions
+        });
+
+        socket.on('roomAddError', (data) => {
+            console.error(data.error);
+            // Handle error in UI
+        });
+    </script>
+</body>
+</html>
